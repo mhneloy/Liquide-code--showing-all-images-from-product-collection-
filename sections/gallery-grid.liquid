@@ -1,0 +1,85 @@
+{% comment %} Show product images from a selected collection {% endcomment %}
+
+<div class="gallery-grid-section">
+  {% assign collection = collections[section.settings.collection] %}
+
+  {% if collection.products.size > 0 %}
+    <div class="gallery-grid columns-{{ section.settings.columns }}">
+      {% for product in collection.products %}
+        {% if product.featured_image %}
+          <div class="gallery-item">
+            <img
+              src="{{ product.featured_image | image_url: width: 800 }}"
+              alt="{{ product.title | escape }}"
+              loading="lazy"
+            >
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No products found in this collection.</p>
+  {% endif %}
+</div>
+
+<style>
+  .gallery-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .gallery-grid.columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gallery-grid.columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .gallery-grid.columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .gallery-grid.columns-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Image collection Grid ",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Select Collection"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Number of Columns",
+      "default": "3",
+      "options": [
+        { "value": "2", "label": "2 Columns" },
+        { "value": "3", "label": "3 Columns" },
+        { "value": "4", "label": "4 Columns" },
+        { "value": "5", "label": "5 Columns" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image Grid",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
